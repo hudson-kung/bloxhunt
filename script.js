@@ -306,23 +306,13 @@ class EventCalendar {
     }
 }
 
-// Initialize calendar when DOM is loaded
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('DOM loaded, initializing calendar...');
-        try {
-            window.calendar = new EventCalendar();
-            console.log('Calendar initialized successfully');
-        } catch (error) {
-            console.error('Error initializing calendar:', error);
-        }
-    });
-} else {
-    console.log('DOM already loaded, initializing calendar...');
-    try {
-        window.calendar = new EventCalendar();
-        console.log('Calendar initialized successfully');
-    } catch (error) {
-        console.error('Error initializing calendar:', error);
-    }
+// Simple initialization - remove all complexity
+console.log('Script loaded');
+
+// Try to initialize immediately
+try {
+    window.calendar = new EventCalendar();
+    console.log('Calendar initialized successfully');
+} catch (error) {
+    console.error('Error initializing calendar:', error);
 }
