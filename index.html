@@ -179,6 +179,55 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Simple inline JavaScript to test functionality
+        console.log('Inline script loaded');
+        
+        // Simple calendar functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            
+            // Test button functionality
+            const addBtn = document.getElementById('addEventBtn');
+            const shareBtn = document.getElementById('shareBtn');
+            const prevBtn = document.getElementById('prevMonth');
+            const nextBtn = document.getElementById('nextMonth');
+            
+            console.log('Buttons found:', {
+                addBtn: !!addBtn,
+                shareBtn: !!shareBtn,
+                prevBtn: !!prevBtn,
+                nextBtn: !!nextBtn
+            });
+            
+            if (addBtn) {
+                addBtn.addEventListener('click', function() {
+                    console.log('Add button clicked!');
+                    alert('Add Event button works!');
+                });
+            }
+            
+            if (shareBtn) {
+                shareBtn.addEventListener('click', function() {
+                    console.log('Share button clicked!');
+                    alert('Share Calendar button works!');
+                });
+            }
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function() {
+                    console.log('Previous button clicked!');
+                    alert('Previous Month button works!');
+                });
+            }
+            
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    console.log('Next button clicked!');
+                    alert('Next Month button works!');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
