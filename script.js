@@ -14,27 +14,57 @@ class EventCalendar {
     }
 
     setupEventListeners() {
-        // Navigation
-        document.getElementById('prevMonth').addEventListener('click', () => this.previousMonth());
-        document.getElementById('nextMonth').addEventListener('click', () => this.nextMonth());
+        console.log('Setting up event listeners...');
         
-        // Modal controls
-        document.getElementById('addEventBtn').addEventListener('click', () => this.openEventModal());
-        document.getElementById('cancelBtn').addEventListener('click', () => this.closeEventModal());
-        document.getElementById('shareBtn').addEventListener('click', () => this.openShareModal());
-        document.getElementById('closeShareBtn').addEventListener('click', () => this.closeShareModal());
-        document.getElementById('copyBtn').addEventListener('click', () => this.copyShareUrl());
+        // Navigation
+        const prevBtn = document.getElementById('prevMonth');
+        const nextBtn = document.getElementById('nextMonth');
+        const addBtn = document.getElementById('addEventBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const closeShareBtn = document.getElementById('closeShareBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const eventForm = document.getElementById('eventForm');
+        
+        console.log('Elements found:', {
+            prevBtn: !!prevBtn,
+            nextBtn: !!nextBtn,
+            addBtn: !!addBtn,
+            cancelBtn: !!cancelBtn,
+            shareBtn: !!shareBtn,
+            closeShareBtn: !!closeShareBtn,
+            copyBtn: !!copyBtn,
+            eventForm: !!eventForm
+        });
+        
+        if (prevBtn) prevBtn.addEventListener('click', () => this.previousMonth());
+        if (nextBtn) nextBtn.addEventListener('click', () => this.nextMonth());
+        if (addBtn) addBtn.addEventListener('click', () => this.openEventModal());
+        if (cancelBtn) cancelBtn.addEventListener('click', () => this.closeEventModal());
+        if (shareBtn) shareBtn.addEventListener('click', () => this.openShareModal());
+        if (closeShareBtn) closeShareBtn.addEventListener('click', () => this.closeShareModal());
+        if (copyBtn) copyBtn.addEventListener('click', () => this.copyShareUrl());
         
         // Form submission
-        document.getElementById('eventForm').addEventListener('submit', (e) => this.handleEventSubmit(e));
+        if (eventForm) eventForm.addEventListener('submit', (e) => this.handleEventSubmit(e));
         
         // Close modals on outside click
-        document.getElementById('eventModal').addEventListener('click', (e) => {
-            if (e.target.id === 'eventModal') this.closeEventModal();
-        });
-        document.getElementById('shareModal').addEventListener('click', (e) => {
-            if (e.target.id === 'shareModal') this.closeShareModal();
-        });
+        const eventModal = document.getElementById('eventModal');
+        const shareModal = document.getElementById('shareModal');
+        
+        if (eventModal) {
+            eventModal.addEventListener('click', (e) => {
+                if (e.target.id === 'eventModal') this.closeEventModal();
+            });
+        }
+        
+        if (shareModal) {
+            shareModal.addEventListener('click', (e) => {
+                if (e.target.id === 'shareModal') this.closeShareModal();
+            });
+        }
+        
+        console.log('Event listeners setup complete');
     }
 
     renderCalendar() {
@@ -277,6 +307,22 @@ class EventCalendar {
 }
 
 // Initialize calendar when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    window.calendar = new EventCalendar();
-});
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM loaded, initializing calendar...');
+        try {
+            window.calendar = new EventCalendar();
+            console.log('Calendar initialized successfully');
+        } catch (error) {
+            console.error('Error initializing calendar:', error);
+        }
+    });
+} else {
+    console.log('DOM already loaded, initializing calendar...');
+    try {
+        window.calendar = new EventCalendar();
+        console.log('Calendar initialized successfully');
+    } catch (error) {
+        console.error('Error initializing calendar:', error);
+    }
+}
