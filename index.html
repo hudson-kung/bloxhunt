@@ -51,18 +51,22 @@
     <!-- Hero Section -->
     <div class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <!-- Fallback background if image is missing -->
-            <div class="w-full h-full bg-gradient-to-br from-blue-900 via-gray-800 to-black"></div>
+            <!-- Guaranteed fallback background -->
+            <div class="w-full h-full bg-gradient-to-br from-blue-900 via-indigo-900 to-black"></div>
             <img src="leviathan.svg" alt="Leviathan" class="w-full h-full object-cover" 
                  onerror="console.error('SVG failed to load:', this.src); this.style.display='none'; document.querySelector('.fallback-bg').style.display='block';">
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/30 to-gray-900 hero-gradient"></div>
         </div>
         <div class="fallback-bg" style="display: none;">
-            <div class="w-full h-full bg-gradient-to-br from-blue-900 via-gray-800 to-black flex items-center justify-center">
+            <div class="w-full h-full bg-gradient-to-br from-blue-900 via-indigo-900 to-black flex items-center justify-center">
                 <div class="text-center text-white">
-                    <i class="fas fa-dragon text-6xl mb-4"></i>
-                    <h2 class="text-4xl font-bold">LEVIATHAN</h2>
+                    <div class="text-8xl mb-4">🌊</div>
+                    <h2 class="text-6xl font-bold mb-4">LEVIATHAN</h2>
                     <p class="text-gray-300 mt-2">The Ancient Terror of the Deep</p>
+                    <div class="mt-8 text-gray-400">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        Image loading failed - Showing fallback
+                    </div>
                 </div>
             </div>
         </div>
