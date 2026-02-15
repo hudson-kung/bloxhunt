@@ -283,14 +283,22 @@
                 const dayEvents = this.events.filter(event => event.date === dateStr);
                 const isToday = this.isToday(year, month, day);
                 
-                dayElement.className = `calendar-day p-2 border border-gray-200 rounded-lg cursor-pointer ${
+                // Check if date is in the past
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const currentDate = new Date(year, month, day);
+                currentDate.setHours(0, 0, 0, 0);
+                const isPast = currentDate < today;
+                
+                dayElement.className = `calendar-day p-2 border rounded-lg ${
+                    isPast ? 'bg-gray-100 border-gray-300 text-gray-400 cursor-not-allowed' :
                     isToday ? 'bg-indigo-50 border-indigo-300' : 
                     dayEvents.length > 0 ? 'bg-indigo-100 border-indigo-300 hover:bg-indigo-200' : 
-                    'hover:bg-gray-50'
+                    'hover:bg-gray-50 cursor-pointer'
                 }`;
                 
                 dayElement.innerHTML = `
-                    <div class="font-semibold text-gray-800 mb-1">${day}</div>
+                    <div class="font-semibold mb-1">${day}</div>
                     <div class="space-y-1">
                         ${dayEvents.slice(0, 2).map(event => `
                             <div class="event-badge text-xs bg-indigo-600 text-white px-1 py-0.5 rounded truncate">
@@ -303,7 +311,12 @@
                     </div>
                 `;
                 
-                dayElement.addEventListener('click', () => this.selectDate(new Date(year, month, day)));
+                if (!isPast) {
+                    dayElement.addEventListener('click', () => this.selectDate(new Date(year, month, day)));
+                } else {
+                    dayElement.style.cursor = 'not-allowed';
+                    dayElement.title = 'Past date - cannot select';
+                }
                 
                 return dayElement;
             }
@@ -312,6 +325,17 @@
                 this.selectedDate = date;
                 const dateStr = this.formatDate(date);
                 const dayEvents = this.events.filter(event => event.date === dateStr);
+                
+                // Check if date is in the past
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Set to start of day for comparison
+                const selectedDate = new Date(date);
+                selectedDate.setHours(0, 0, 0, 0);
+                
+                if (selectedDate < today) {
+                    this.showNotification('Cannot select past dates', 'error');
+                    return;
+                }
                 
                 if (dayEvents.length > 0) {
                     // Show event details for this day
@@ -443,12 +467,55 @@
                 const timeInput = document.getElementById('eventTime');
                 
                 if (nameInput && discordInput && dateInput && timeInput) {
+                    // Validate inputs
+                    const name = nameInput.value.trim();
+                    const discordServer = discordInput.value.trim();
+                    const date = dateInput.value;
+                    const time = timeInput.value;
+                    
+                    // Validation checks
+                    if (!name) {
+                        this.showNotification('Please enter an event name', 'error');
+                        return;
+                    }
+                    
+                    if (!discordServer) {
+                        this.showNotification('Please enter a Discord server', 'error');
+                        return;
+                    }
+                    
+                    if (!date) {
+                        this.showNotification('Please select a date', 'error');
+                        return;
+                    }
+                    
+                    if (!time) {
+                        this.showNotification('Please select a time', 'error');
+                        return;
+                    }
+                    
+                    // Validate date is not in the past
+                    const eventDateTime = new Date(date + ' ' + time);
+                    const now = new Date();
+                    if (eventDateTime < now) {
+                        this.showNotification('Cannot create events in the past', 'error');
+                        return;
+                    }
+                    
+                    // Validate date is reasonable (not too far in future)
+                    const maxFutureDate = new Date();
+                    maxFutureDate.setFullYear(maxFutureDate.getFullYear() + 2);
+                    if (eventDateTime > maxFutureDate) {
+                        this.showNotification('Date is too far in the future (max 2 years)', 'error');
+                        return;
+                    }
+                    
                     const event = {
                         id: Date.now(),
-                        name: nameInput.value,
-                        discordServer: discordInput.value,
-                        date: dateInput.value,
-                        time: timeInput.value,
+                        name: name,
+                        discordServer: discordServer,
+                        date: date,
+                        time: time,
                         createdAt: new Date().toISOString()
                     };
                     
@@ -544,10 +611,14 @@
             showNotification(message, type) {
                 const notification = document.createElement('div');
                 notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 ${
-                    type === 'success' ? 'bg-green-600' : 'bg-blue-600'
+                    type === 'success' ? 'bg-green-600' : 
+                    type === 'error' ? 'bg-red-600' : 'bg-blue-600'
                 }`;
                 notification.innerHTML = `
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} mr-2"></i>
+                    <i class="fas fa-${
+                        type === 'success' ? 'check-circle' : 
+                        type === 'error' ? 'exclamation-triangle' : 'info-circle'
+                    } mr-2"></i>
                     ${message}
                 `;
                 document.body.appendChild(notification);
