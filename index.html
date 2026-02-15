@@ -51,7 +51,9 @@
     <!-- Hero Section -->
     <div class="relative h-screen flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="leviathan.png" alt="Leviathan" class="w-full h-full object-cover">
+            <!-- Fallback background if image is missing -->
+            <div class="w-full h-full bg-gradient-to-br from-blue-900 via-gray-800 to-black"></div>
+            <img src="leviathan.png" alt="Leviathan" class="w-full h-full object-cover" onerror="this.style.display='none'">
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/30 to-gray-900 hero-gradient"></div>
         </div>
         <div class="relative z-10 text-center px-4">
