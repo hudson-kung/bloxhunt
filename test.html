@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <h1 class="text-2xl font-bold mb-4">Test Page</h1>
+    
+    <button id="testBtn" class="bg-blue-500 text-white px-4 py-2 rounded">
+        Click Me
+    </button>
+    
+    <div id="result" class="mt-4"></div>
+    
+    <script>
+        console.log('Test script loaded');
+        
+        document.getElementById('testBtn').addEventListener('click', function() {
+            console.log('Button clicked!');
+            document.getElementById('result').innerHTML = 'Button works!';
+        });
+        
+        console.log('Event listener attached');
+    </script>
+</body>
+</html>
