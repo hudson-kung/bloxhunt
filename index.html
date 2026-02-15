@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Event Calendar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .calendar-day {
+            min-height: 80px;
+            transition: all 0.3s ease;
+        }
+        .calendar-day:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .event-badge {
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .modal {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">
+                <i class="fas fa-calendar-alt mr-3 text-indigo-600"></i>
+                Public Event Calendar
+            </h1>
+            <p class="text-gray-600">Create and share events with your community</p>
+        </header>
+
+        <!-- Controls -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex flex-wrap justify-between items-center gap-4">
+                <div class="flex items-center gap-4">
+                    <button id="prevMonth" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <h2 id="currentMonth" class="text-xl font-semibold text-gray-800"></h2>
+                    <button id="nextMonth" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="flex gap-3">
+                    <button id="addEventBtn" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center gap-2">
+                        <i class="fas fa-plus"></i>
+                        Add Event
+                    </button>
+                    <button id="shareBtn" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition flex items-center gap-2">
+                        <i class="fas fa-share-alt"></i>
+                        Share Calendar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="grid grid-cols-7 gap-2 mb-4">
+                <div class="text-center font-semibold text-gray-700 py-2">Sun</div>
+                <div class="text-center font-semibold text-gray-700 py-2">Mon</div>
+                <div class="text-center font-semibold text-gray-700 py-2">Tue</div>
+                <div class="text-center font-semibold text-gray-700 py-2">Wed</div>
+                <div class="text-center font-semibold text-gray-700 py-2">Thu</div>
+                <div class="text-center font-semibold text-gray-700 py-2">Fri</div>
+                <div class="text-center font-semibold text-gray-700 py-2">Sat</div>
+            </div>
+            <div id="calendarGrid" class="grid grid-cols-7 gap-2">
+                <!-- Calendar days will be generated here -->
+            </div>
+        </div>
+
+        <!-- Events List -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                <i class="fas fa-list mr-2 text-indigo-600"></i>
+                Upcoming Events
+            </h3>
+            <div id="eventsList" class="space-y-3">
+                <!-- Events will be listed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div id="eventModal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-calendar-plus mr-2 text-green-600"></i>
+                Add New Event
+            </h3>
+            <form id="eventForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Event Name</label>
+                    <input type="text" id="eventName" required 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           placeholder="Enter event name">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Discord Server</label>
+                    <input type="text" id="discordServer" required 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           placeholder="Enter Discord server name">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Date</label>
+                    <input type="date" id="eventDate" required 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-semibold mb-2">Time</label>
+                    <input type="time" id="eventTime" required 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                        <i class="fas fa-save mr-2"></i>
+                        Save Event
+                    </button>
+                    <button type="button" id="cancelBtn" class="flex-1 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition">
+                        <i class="fas fa-times mr-2"></i>
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-share-alt mr-2 text-purple-600"></i>
+                Share Calendar
+            </h3>
+            <div class="mb-6">
+                <p class="text-gray-600 mb-4">Share this public calendar link with others:</p>
+                <div class="flex gap-2">
+                    <input type="text" id="shareUrl" readonly 
+                           class="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50"
+                           value="">
+                    <button id="copyBtn" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mb-4">
+                <p class="text-sm text-gray-500">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Anyone with this link can view the calendar
+                </p>
+            </div>
+            <button id="closeShareBtn" class="w-full px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
