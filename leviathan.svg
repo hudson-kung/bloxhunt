@@ -1,0 +1,54 @@
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="ocean" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1929;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1a237e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="eyeGlow">
+      <stop offset="0%" style="stop-color:#00ffff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0099ff;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#003366;stop-opacity:0.3" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Ocean Background -->
+  <rect width="1920" height="1080" fill="url(#ocean)"/>
+  
+  <!-- Water Effects -->
+  <ellipse cx="400" cy="800" rx="300" ry="50" fill="#003366" opacity="0.3"/>
+  <ellipse cx="1500" cy="700" rx="400" ry="80" fill="#003366" opacity="0.2"/>
+  
+  <!-- Leviathan Body -->
+  <path d="M 960 540 Q 700 400, 500 350 T 300 320 Q 200 380, 150 450 T 100 650 Q 200 750, 400 850 T 960 900 Q 1400 800, 1600 700 T 1800 650 Q 1850 550, 1700 450 T 1500 380 Q 1300 320, 1000 400 Q 900 480, 960 540" 
+        fill="#1a1a2e" stroke="#00ffff" stroke-width="3" opacity="0.9"/>
+  
+  <!-- Leviathan Head -->
+  <ellipse cx="960" cy="420" rx="120" ry="80" fill="#2a2a3e" stroke="#00ffff" stroke-width="2"/>
+  
+  <!-- Eyes -->
+  <circle cx="900" cy="400" r="25" fill="url(#eyeGlow)"/>
+  <circle cx="1020" cy="400" r="25" fill="url(#eyeGlow)"/>
+  <circle cx="900" cy="400" r="12" fill="#ffffff"/>
+  <circle cx="1020" cy="400" r="12" fill="#ffffff"/>
+  <circle cx="900" cy="400" r="6" fill="#000000"/>
+  <circle cx="1020" cy="400" r="6" fill="#000000"/>
+  
+  <!-- Teeth -->
+  <path d="M 850 430 L 870 460 L 890 430 M 1030 430 L 1050 460 L 1070 430 M 880 440 L 900 470 L 920 440 M 1000 440 L 1020 470 L 1040 440" 
+        stroke="#ffffff" stroke-width="4" fill="none"/>
+  
+  <!-- Fins -->
+  <path d="M 300 500 Q 200 600, 150 700 T 100 850 M 1600 500 Q 1700 600, 1800 700 T 1900 850" 
+        fill="#0066cc" stroke="#00ffff" stroke-width="2" opacity="0.8"/>
+  
+  <!-- Tentacles -->
+  <path d="M 500 350 Q 450 250, 350 150 T 200 50 M 1420 700 Q 1450 800, 1500 900 T 1600 1050" 
+        fill="#1a1a2e" stroke="#00ffff" stroke-width="2" opacity="0.7"/>
+  
+  <!-- Bubbles -->
+  <circle cx="300" cy="600" r="15" fill="#00ffff" opacity="0.4"/>
+  <circle cx="1500" cy="500" r="20" fill="#00ffff" opacity="0.3"/>
+  <circle cx="800" cy="700" r="10" fill="#00ffff" opacity="0.5"/>
+  <circle cx="1200" cy="600" r="12" fill="#00ffff" opacity="0.4"/>
+</svg>
