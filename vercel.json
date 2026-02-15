@@ -13,23 +13,18 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!script\\.js|test\\.html).*)",
       "destination": "/index.html"
     }
   ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/script.js",
       "headers": [
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/index.html",
-      "headers": [
+          "key": "Content-Type",
+          "value": "application/javascript"
+        },
         {
           "key": "Cache-Control",
           "value": "public, max-age=0, must-revalidate"
@@ -37,7 +32,7 @@
       ]
     },
     {
-      "source": "/script.js",
+      "source": "/index.html",
       "headers": [
         {
           "key": "Cache-Control",
