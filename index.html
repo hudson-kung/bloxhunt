@@ -53,8 +53,18 @@
         <div class="absolute inset-0 z-0">
             <!-- Fallback background if image is missing -->
             <div class="w-full h-full bg-gradient-to-br from-blue-900 via-gray-800 to-black"></div>
-            <img src="leviathan.png" alt="Leviathan" class="w-full h-full object-cover" onerror="this.style.display='none'">
+            <img src="./leviathan.png" alt="Leviathan" class="w-full h-full object-cover" 
+                 onerror="console.error('Image failed to load:', this.src); this.style.display='none'; document.querySelector('.fallback-bg').style.display='block';">
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/30 to-gray-900 hero-gradient"></div>
+        </div>
+        <div class="fallback-bg" style="display: none;">
+            <div class="w-full h-full bg-gradient-to-br from-blue-900 via-gray-800 to-black flex items-center justify-center">
+                <div class="text-center text-white">
+                    <i class="fas fa-dragon text-6xl mb-4"></i>
+                    <h2 class="text-4xl font-bold">LEVIATHAN</h2>
+                    <p class="text-gray-300 mt-2">The Ancient Terror of the Deep</p>
+                </div>
+            </div>
         </div>
         <div class="relative z-10 text-center px-4">
             <div class="mb-8 animate-pulse">
@@ -157,10 +167,17 @@
 
         <!-- Events List -->
         <div class="bg-gray-800 rounded-lg shadow-lg p-6 mt-6 border border-gray-700">
-            <h3 class="text-xl font-semibold text-white mb-4">
-                <i class="fas fa-list mr-2 text-blue-500"></i>
-                Upcoming Events
-            </h3>
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-white">
+                    <i class="fas fa-list mr-2 text-blue-500"></i>
+                    Upcoming Events
+                </h3>
+                <button onclick="calendar.clearAllEvents()" 
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm">
+                    <i class="fas fa-trash-alt mr-2"></i>
+                    Clear All
+                </button>
+            </div>
             <div id="eventsList" class="space-y-3">
                 <!-- Events will be listed here -->
             </div>
@@ -636,8 +653,20 @@
 
             deleteEvent(eventId) {
                 if (confirm('Are you sure you want to delete this event?')) {
+                    console.log('Deleting event:', eventId);
+                    console.log('Events before delete:', this.events);
+                    
                     this.events = this.events.filter(event => event.id !== eventId);
+                    console.log('Events after delete:', this.events);
+                    
                     this.saveEvents();
+                    
+                    // Force clear and re-render
+                    const calendarGrid = document.getElementById('calendarGrid');
+                    if (calendarGrid) {
+                        calendarGrid.innerHTML = '';
+                    }
+                    
                     this.renderCalendar();
                     this.updateEventsList();
                     this.showNotification('Event deleted successfully!', 'info');
@@ -719,11 +748,22 @@
 
             saveEvents() {
                 localStorage.setItem('calendarEvents', JSON.stringify(this.events));
+                console.log('Events saved to localStorage:', this.events);
             }
 
             loadEvents() {
                 const stored = localStorage.getItem('calendarEvents');
-                return stored ? JSON.parse(stored) : [];
+                const events = stored ? JSON.parse(stored) : [];
+                console.log('Events loaded from localStorage:', events);
+                return events;
+            }
+
+            clearAllEvents() {
+                this.events = [];
+                this.saveEvents();
+                this.renderCalendar();
+                this.updateEventsList();
+                console.log('All events cleared');
             }
         }
 
