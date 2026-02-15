@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minimal Test</title>
+</head>
+<body>
+    <h1>Test Page</h1>
+    <button id="testBtn">Click Me</button>
+    <p id="result"></p>
+    
+    <script>
+        console.log('Script running');
+        document.getElementById('testBtn').onclick = function() {
+            console.log('Button clicked');
+            document.getElementById('result').textContent = 'It works!';
+        };
+    </script>
+</body>
+</html>
